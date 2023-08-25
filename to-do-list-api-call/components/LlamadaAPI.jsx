@@ -1,17 +1,40 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 const LlamadaAPI = () => {
 
+
+    const [datosAPI, setDatosAPI] = useState([])
+    
+    useEffect(() => {
+        llamada()
+    }, [])
+    
     const llamada = async () => {
+        try {
         const api = await fetch('https://dummyjson.com/todos?limit=15');
         const datos = await api.json();
-        console.log(datos[1])
-        
+        setDatosAPI(datos.todos)
+        } catch (error) {
+            console.log("error", error)
+        }
 
     }
-llamada()
+    const showDataAPI = datosAPI.map((elementoActual,index,array)=>{
+      return(
+           <li key={elementoActual.id}>{elementoActual.todo}</li>
+      )
+  })
+    
   return (
-    <div>LlamadaAPI</div>
+
+        <>
+        <div>
+          <h4>Listado de elementos:</h4>
+          <ul>
+            {showDataAPI}
+          </ul>
+        </div>
+        </>
   )
 }
 
